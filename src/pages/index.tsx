@@ -74,8 +74,6 @@ export default function Home(props: TProps) {
   const { data } = props;
   const recipesArr = data.allArticles;
 
-  console.log(props);
-
   return (
     <>
       <Head>
