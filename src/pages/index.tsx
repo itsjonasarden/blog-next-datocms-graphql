@@ -62,8 +62,6 @@ export default function Home(props) {
   const { data } = props;
   const recipesArr = data.allArticles;
 
-  console.log(recipesArr);
-
   return (
     <>
       <Head>

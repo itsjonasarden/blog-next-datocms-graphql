@@ -8,7 +8,11 @@ const RecipeContainer = styled.div`
 `;
 
 const RecipeDescription = styled.p`
-  margin-bottom: 1rem;
+  margin-top: 1rem;
+
+  ol > li {
+    margin-bottom: 1rem;
+  }
 `;
 
 const RecipeHeading = styled.h2`
