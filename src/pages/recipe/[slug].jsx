@@ -14,8 +14,6 @@ import {
 export default function RecipePage(props) {
   const { postData } = props;
 
-  console.log(postData.content);
-
   return (
     <RecipeContainer>
       <Link href="/"> Back to recipes </Link>
