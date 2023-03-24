@@ -1,7 +1,8 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import Link from "next/link";
-import { getAllRecipes } from "./lib/recipes";
+
+import { request } from "./lib/datocms";
 
 import {
   BlogContainer,
@@ -26,8 +27,42 @@ type TRecipe = {
   slug: string;
 };
 
-export default function Home() {
-  const recipes = getAllRecipes();
+const HOMEPAGE_QUERY = `
+query MyQuery {
+  allArticles {
+    author {
+      name
+    }
+    content {
+      value
+    }
+    coverImage {
+      url
+    }
+    excerpt
+    id
+    publishedDate
+    slug
+    title
+  }
+}
+`;
+
+export async function getStaticProps() {
+  //@ts-ignore
+  const data = await request({
+    query: HOMEPAGE_QUERY,
+  });
+  return {
+    props: { data },
+  };
+}
+
+export default function Home(props) {
+  const { data } = props;
+  const recipesArr = data.allArticles;
+
+  console.log(recipesArr);
 
   return (
     <>
@@ -40,7 +75,7 @@ export default function Home() {
       <BlogContainer className={inter.className}>
         <BlogHeading>Cooking Recipes</BlogHeading>
         <RecipeSection>
-          {recipes.map((recipe) => (
+          {recipesArr.map((recipe) => (
             <RecipePreview key={recipe.id} data={recipe} />
           ))}
         </RecipeSection>
@@ -55,7 +90,12 @@ const RecipePreview = ({ data }: { data: TRecipe }) => {
       <Link href={`/recipe/${data.slug}`}>
         <RecipeHeading>{data.title}</RecipeHeading>
       </Link>
-      <Image src={data.coverImage} alt={data.title} width={200} height={200} />
+      <Image
+        src={data.coverImage.url}
+        alt={data.title}
+        width={200}
+        height={200}
+      />
       <RecipeDescription>{data.excerpt}</RecipeDescription>
     </RecipeContainer>
   );

@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAllSlugs, getRecipeData } from "../lib/recipes";
+
+import { request } from "../lib/datocms";
+
 import {
   RecipeContainer,
   RecipeHeading,
@@ -17,12 +19,13 @@ import {
 
 export default function RecipePage(props) {
   const { postData } = props;
+
   return (
     <RecipeContainer>
       <Link href="/"> Back to recipes </Link>
       <RecipeHeading>{postData.title}</RecipeHeading>
       <Image
-        src={postData.coverImage}
+        src={postData.coverImage.url}
         alt={postData.title}
         width={200}
         height={200}
@@ -61,19 +64,57 @@ export default function RecipePage(props) {
   );
 }
 
-export const getStaticPaths = () => {
-  const paths = getAllSlugs();
+const PATHS_QUERY = `
+query PathsQuery {
+  allArticles {
+    slug
+  }
+}`;
+
+export const getStaticPaths = async () => {
+  const slugQuery = await request({
+    query: PATHS_QUERY,
+  });
+
+  let paths = [];
+  slugQuery.allArticles.map((article) => {
+    paths.push(`/recipe/${article.slug}`);
+  });
+
   return {
     paths,
     fallback: false,
   };
 };
 
-export const getStaticProps = ({ params }) => {
-  const postData = getRecipeData(params.slug);
+const RECIPE_QUERY = `
+query RecipeQuery($slug: String!) {
+  article(filter: {slug: {eq: $slug}}) {
+    author {
+      name
+    }
+    content {
+      value
+    }
+    coverImage {
+      url
+    }
+    excerpt
+    publishedDate
+    title
+  }
+}
+`;
+
+export const getStaticProps = async ({ params }) => {
+  const post = await request({
+    query: RECIPE_QUERY,
+    variables: { slug: params.slug },
+  });
+
   return {
     props: {
-      postData,
+      postData: post.article,
     },
   };
 };
