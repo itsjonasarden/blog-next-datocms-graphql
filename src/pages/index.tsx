@@ -17,14 +17,26 @@ import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 
 type TRecipe = {
-  id: number;
-  title: string;
-  publishDate: string;
-  author: string;
-  coverImage: string;
+  author: {
+    name: string;
+  };
+  content: {
+    value: string;
+  };
+  coverImage: {
+    url: string;
+  };
   excerpt: string;
-  content: string;
+  id: string;
+  publishedDate: string;
   slug: string;
+  title: string;
+};
+
+type TProps = {
+  data: {
+    allArticles: TRecipe[];
+  };
 };
 
 const HOMEPAGE_QUERY = `
@@ -58,9 +70,11 @@ export async function getStaticProps() {
   };
 }
 
-export default function Home(props) {
+export default function Home(props: TProps) {
   const { data } = props;
   const recipesArr = data.allArticles;
+
+  console.log(props);
 
   return (
     <>
