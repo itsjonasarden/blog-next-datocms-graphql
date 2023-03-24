@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 
-import { request } from "./lib/datocms";
+import { request } from "../lib/datocms";
 
 import {
   BlogContainer,
@@ -11,7 +11,7 @@ import {
   RecipeContainer,
   RecipeHeading,
   RecipeDescription,
-} from "./styled";
+} from "../styles/main";
 import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });

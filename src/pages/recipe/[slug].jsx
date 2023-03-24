@@ -3,21 +3,13 @@ import Link from "next/link";
 
 import { StructuredText } from "react-datocms/structured-text";
 
-import { request } from "../lib/datocms";
+import { request } from "../../lib/datocms";
 
 import {
   RecipeContainer,
   RecipeHeading,
-  RecipeSubHeading,
-  RecipeStepsAndIngredients,
-  RecipeStepsContainer,
-  RecipeIngredientsContainer,
-  RecipeSteps,
-  RecipeStep,
-  RecipeIngredients,
-  RecipeIngredient,
   RecipeDescription,
-} from "./styled";
+} from "../../styles/recipe";
 
 export default function RecipePage(props) {
   const { postData } = props;
